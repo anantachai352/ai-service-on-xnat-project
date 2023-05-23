@@ -5,6 +5,9 @@ The program will download images from VXNAT using the REST API. Then, it will ra
 
 1. Prior to using the program, users should install xnat-docker-compose and run it to activate the xnat-server. For additional information, please refer to https://github.com/NrgXnat/xnat-docker-compose.
 2. The user needs to know the ***URL*** of the VXNAT server, as well as the ***username*** and ***password*** for logging in and accessing the system.
+3. The user must have a Google account and enable the Google Drive API to obtain a token for connecting to Google Drive. The token will be in the form of a ***JSON*** file that the user needs to download and add to the program's working directory. For more information, please refer to https://developers.google.com/drive/api/guides/about-sdk.
+
+
 
 ## Usage
 1. Clone the [ai-service-on-xnat-project](https://github.com/anantachai352/ai-service-on-xnat-project) repository 
