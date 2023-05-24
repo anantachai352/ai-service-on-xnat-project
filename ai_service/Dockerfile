@@ -35,6 +35,4 @@ ADD token_drive_v3.pickle .
 VOLUME /usr/src/model
 RUN python3 -m pip install -r req.txt
 
-# CMD ["--network=host", "sh run_from_xnat.sh /input #PROJECT_ID# #SUBJECT_ID# #SESSION_ID#"]
-# CMD ["--network=host", "bash"]
 ENTRYPOINT [] 
