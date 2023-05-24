@@ -31,9 +31,9 @@ def DownloadModel():
             print(f"{item['name']} ({item['mimeType']}) - ID: {item['id']}")
 
     file_name = item['name']
-    print(file_name)
+    # print(file_name)
     file_id = item['id']
-    print(file_id)
+    # print(file_id)
 
     # Create folder
     folder = 'model'
@@ -53,7 +53,7 @@ def DownloadModel():
         print(f"The file in the {folder} could not be found.")
 
         # Request the file content
-        print('Downloading...')
+        print(f'Downloading...{file_name}...')
         try:
             request = service.files().get_media(fileId=file_id)
             file = io.BytesIO(request.execute())
@@ -67,6 +67,7 @@ def DownloadModel():
             print(f'An error occurred: {error}')
 
     return modelpath
+
 if __name__=="__main__":
     filename = DownloadModel()
     print(filename)

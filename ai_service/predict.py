@@ -20,14 +20,14 @@ def predicttion(img_arr, model_path):
     print('Model path is:', model_path)
     # load model
     model = load_model(model_path)
-    print("max & min", np.amax(img_arr), np.amin(img_arr))
+    # print("max & min", np.amax(img_arr), np.amin(img_arr))
 
     #image normalization 16 bit to 8 bit 
     image_normali = mapRange(value=img_arr, inMin=np.amin(img_arr) ,inMax=np.amax(img_arr), outMin=0.0, outMax=255.0)
-    print("image normalization max & min :", np.amax(image_normali), np.amin(image_normali))
-    print("image normalization dtype:", image_normali.dtype)
+    # print("image normalization max & min :", np.amax(image_normali), np.amin(image_normali))
+    # print("image normalization dtype:", image_normali.dtype)
     new_image = image_normali.astype(np.uint8)
-    print("image normalization new dtype:", new_image.dtype)    
+    # print("image normalization new dtype:", new_image.dtype)    
 
     # image resize
     img_resize = cv2.resize(img_arr, (224, 224))
@@ -39,11 +39,11 @@ def predicttion(img_arr, model_path):
     pred = model.predict(image_reshape)
     classes = ['normal', 'pneumonia']
     conf = pred[0]
-    print(conf)
+    # print(conf)
     idx = np.argmax(conf)
-    print(idx)
+    # print(idx)
     label = classes[idx]
-    print(label)
+    # print(label)
     labels = "{}: {:.2f}%".format(label, conf[idx] * 100)
     print(labels)
 
