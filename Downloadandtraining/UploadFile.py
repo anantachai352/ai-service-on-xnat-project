@@ -1,12 +1,11 @@
 import os
 import io
 from Google import Create_Service
-from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 import httplib2
 from tqdm import tqdm
 import time
-from IPython.display import display
+
 
 
 def uploadFile(folder, filename):

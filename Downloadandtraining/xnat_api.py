@@ -7,6 +7,7 @@ import shutil
 def api_images_from_xnat(xnat_url, user, password, project_id):
     folder = 'Zipdata'
     os.makedirs(folder, exist_ok=True)
+    
 
     # Authenticate with the XNAT server and get the JSESSIONID cookie
     auth_url = f'http://{xnat_url}/data/JSESSION'
@@ -24,6 +25,7 @@ def api_images_from_xnat(xnat_url, user, password, project_id):
     # print(subjects_json)
     # Loop through all subjects and download DICOM files
     for subject in subjects_json['ResultSet']['Result']:
+
         subject_id = subject['ID']
         # print(subject_label)
         subject_sessions_url = f"http://{xnat_url}/data/projects/{project_id}/subjects/{subject_id}/experiments"
@@ -47,8 +49,8 @@ def api_images_from_xnat(xnat_url, user, password, project_id):
                 with open(zip_file, 'wb') as f:
                     f.write(response.content)
                 
-                with zipfile.ZipFile(zip_file) as zf:
-                    print(zf.namelist)
+                # with zipfile.ZipFile(zip_file) as zf:
+                #     print(zf.namelist)
     return folder
 
 
@@ -99,8 +101,13 @@ def unzip(zip_folder):
     folder3_files = files[int(total_files*0.85):]
     # print(folder3_files)
 
+    count_1 = 0
+    count_2 = 0
+    count_3 = 0 
+
     ## For the train folder
     for files in folder1_files:
+        count_1 += 1
         # print(files)
         zip_file = zipfile.ZipFile(zip_folder + '/' +files, 'r')
         # print(zip_file)
@@ -126,6 +133,7 @@ def unzip(zip_folder):
 
     ## For the validation folder
     for files in folder2_files:
+        count_2 += 1
         # print(files)
         zip_file = zipfile.ZipFile(zip_folder + '/' +files, 'r')
         # print(zip_file)
@@ -152,6 +160,7 @@ def unzip(zip_folder):
 
     ## For the test folder
     for files in folder3_files:
+        count_3 += 1
         # print(files)
         zip_file = zipfile.ZipFile(zip_folder + '/' +files, 'r')
         # print(zip_file)
@@ -173,3 +182,9 @@ def unzip(zip_folder):
                     image_file.write(image_data)
                     
         zip_file.close()
+    
+    num = count_1 + count_2 + count_3
+    print('Total files : ', num)
+    print(f'Train : ', count_1)
+    print(f'Validataion : ', count_2)
+    print(f'Test : ', count_3)
