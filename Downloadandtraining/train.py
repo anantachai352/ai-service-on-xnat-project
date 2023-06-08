@@ -5,12 +5,13 @@ import tensorflow as tf
 from keras import layers
 from keras.optimizers import Adam
 from keras.layers.core import Dense
-from keras.layers.core import Flatten
+from keras.layers import GlobalAveragePooling2D
 from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
 import PIL
 from UploadFile import uploadFile
+
 
 # Initialize a variable
 default_epochs = 1000
@@ -98,31 +99,33 @@ class_names = list(train.class_indices.keys())
 print(class_names)
 
 
-class Resnet50Model(tf.Module):
-    def __init__(self, num_classes=10):
-        super(Resnet50Model, self).__init__()
-        self.pretrained_model = tf.keras.applications.ResNet50(include_top=False,
-                                                               input_shape=(224, 224, 3),
-                                                               pooling='avg')
+class VGG16Model(tf.Module):
+    def __init__(self, num_classes=2):
+        super(VGG16Model, self).__init__()
+        self.pretrained_model = tf.keras.applications.VGG16(include_top=False,
+                                                            input_shape=(224, 224, 3),
+                                                            pooling=None)  
         for layer in self.pretrained_model.layers:
-            resize_and_rescale,
-            data_augmentation,
-            layer.trainable = True   
-        self.flatten = Flatten()
-        self.fc1 = Dense(512, activation='relu')
-        self.fc2 = Dense(num_classes, activation='softmax')
+            layer.trainable = True
+        
+        self.pooling_layer = GlobalAveragePooling2D()
+        self.fc1 = Dense(4096, activation='relu')
+        self.fc2 = Dense(4096, activation='relu')
+        self.fc3 = Dense(num_classes, activation='softmax')
     
     def __call__(self, inputs):
         x = self.pretrained_model(inputs)
-        x = self.flatten(x)
+        x = self.pooling_layer(x)
         x = self.fc1(x)
         x = self.fc2(x)
+        x = self.fc3(x)
         return x
 
 inputs = tf.keras.Input(shape=(224, 224, 3))
-resnet50_layer = Resnet50Model(num_classes=num_classes)
-outputs = resnet50_layer(inputs)
+vgg16_layer = VGG16Model(num_classes=num_classes)
+outputs = vgg16_layer(inputs)
 model = Model(inputs=inputs, outputs=outputs)
+
 
 # Set Early stopping
 early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
@@ -146,7 +149,7 @@ def save_model():
     os.makedirs(folder, exist_ok=True)
 
     # file name
-    filename = 'pneumoniaRESNET50_v'
+    filename = 'pneumoniaVGG16_v'
     file_extension = '.h5'
     i = 1
 

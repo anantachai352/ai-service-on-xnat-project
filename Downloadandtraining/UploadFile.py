@@ -51,3 +51,8 @@ def uploadFile(folder, filename):
     print('Upload complete.')
 
 
+if __name__ == '__main__':
+    folder = 'model'
+    filename = 'pneumoniaVGG16_v1.h5'
+    uploadFile(folder, filename)
+
